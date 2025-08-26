@@ -24,6 +24,9 @@ let isShooting = false;
 
 // --- Drawing Functions ---
 
+/**
+ * Draws the background, which consists of a blue sky and green ground.
+ */
 function drawBackground() {
     // Draw sky
     ctx.fillStyle = SKY_COLOR;
@@ -34,17 +37,24 @@ function drawBackground() {
     ctx.fillRect(0, GROUND_Y, canvas.width, canvas.height - GROUND_Y);
 }
 
+/**
+ * Draws the cannon on the canvas at its current position and angle.
+ */
 function drawCannon() {
     if (!cannon) return;
     ctx.save();
     ctx.translate(cannon.x, cannon.y);
     ctx.rotate(cannon.angle);
     ctx.fillStyle = CANNON_COLOR;
-    // The cannon is a rectangle, with its base at the translated point
-    ctx.fillRect(0, -cannon.height / 2, cannon.width, cannon.height);
+    // The cannon is a rectangle. By drawing it with a negative width,
+    // it extends to the left of the pivot point, making it look like it's pointing left.
+    ctx.fillRect(0, -cannon.height / 2, -cannon.width, cannon.height);
     ctx.restore();
 }
 
+/**
+ * Draws the projectile (a circle) on the canvas at its current position.
+ */
 function drawProjectile() {
     if (!projectile) return; // Don't hide the projectile when it lands
     ctx.beginPath();
@@ -56,6 +66,9 @@ function drawProjectile() {
 
 // --- Physics and Path ---
 
+/**
+ * Updates the projectile's position based on its velocity and gravity.
+ */
 function updatePhysics() {
     if (!projectile || !isShooting) return;
 
@@ -67,6 +80,9 @@ function updatePhysics() {
     projectile.y += projectile.vy;
 }
 
+/**
+ * Draws the projectile's path on the canvas as a series of dots.
+ */
 function drawPath() {
     ctx.fillStyle = PATH_COLOR;
     for (const point of path) {
@@ -82,6 +98,10 @@ function drawPath() {
 let frameCounter = 0;
 let animationId = null;
 
+/**
+ * Resets the simulation to its initial state with a new random trajectory.
+ * This function is called at the start and after a projectile lands.
+ */
 function resetSimulation() {
     if (animationId) {
         cancelAnimationFrame(animationId);
@@ -127,6 +147,10 @@ function resetSimulation() {
     gameLoop();
 }
 
+/**
+ * The main animation loop. It updates physics, draws the scene,
+ * and checks for collisions.
+ */
 function gameLoop() {
     updatePhysics();
 
@@ -154,6 +178,9 @@ function gameLoop() {
     }
 }
 
+/**
+ * A helper function to clear the canvas and draw all elements in the correct order.
+ */
 function draw() {
     // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
