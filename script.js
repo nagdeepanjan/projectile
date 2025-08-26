@@ -44,12 +44,12 @@ function drawCannon() {
     if (!cannon) return;
     ctx.save();
     ctx.translate(cannon.x, cannon.y);
-    ctx.scale(1, -1);
-    ctx.rotate(-cannon.angle);
+    ctx.scale(-1, -1); // Point left and up
+    ctx.rotate(cannon.angle); // Rotate by the negative angle
     ctx.fillStyle = CANNON_COLOR;
-    // The cannon is a rectangle. By drawing it with a negative width,
-    // it extends to the left of the pivot point, making it look like it's pointing left.
-    ctx.fillRect(-cannon.width, -cannon.height / 2, cannon.width, cannon.height);
+    // The cannon is a rectangle, drawn along the positive x-axis.
+    // The scale transform will make it point to the left.
+    ctx.fillRect(0, -cannon.height / 2, cannon.width, cannon.height);
     ctx.restore();
 }
 
